@@ -60,6 +60,16 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_BUILD_Pin GPIO_PIN_13
 #define LED_BUILD_GPIO_Port GPIOC
+#define BUTTON_LEFT_Pin GPIO_PIN_10
+#define BUTTON_LEFT_GPIO_Port GPIOB
+#define BUTTON_RIGHT_Pin GPIO_PIN_11
+#define BUTTON_RIGHT_GPIO_Port GPIOB
+#define RGB_RED_Pin GPIO_PIN_12
+#define RGB_RED_GPIO_Port GPIOB
+#define RGB_BLUE_Pin GPIO_PIN_13
+#define RGB_BLUE_GPIO_Port GPIOB
+#define RGB_GREEN_Pin GPIO_PIN_14
+#define RGB_GREEN_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -62,7 +62,19 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+typedef struct{
+	int points;
+	uint8_t state_machine;
+}Player;
+typedef enum{
+	INIT,
+	MENU,
+	GAME_1,
+	GAME_2,
+	GAME_3,
+	GAME_4,
 
+}State_machine;
 /* USER CODE END 0 */
 
 /**
@@ -72,7 +84,9 @@ static void MX_I2C1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	Player children;
+	children.points = 1;
+	children.state_machine = INIT;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,109 +109,53 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  SSD1306_Init();  // initialise
-   /// lets print some string
-  SSD1306_GotoXY (0,0);
-      SSD1306_Puts ("HELLO", &Font_11x18, 1);
-      SSD1306_GotoXY (10, 30);
-      SSD1306_Puts ("  WORLD :)", &Font_11x18, 1);
-      SSD1306_UpdateScreen(); //display
+  SSD1306_Init(); // initialise
 
-      HAL_Delay (2000);
+  character_draw(1);
+  SSD1306_GotoXY(0, 0);
+  SSD1306_Puts("PTS:", &Font_11x18, 1);
+  SSD1306_GotoXY(42, 0);
+  char* numberstring[(((sizeof children.points)) + 2)/3 + 2];
+  sprintf(numberstring, "%d", children.points++);
+  SSD1306_Puts(numberstring, &Font_11x18, 1);
+  SSD1306_UpdateScreen(); //display
+  HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
 
-
-      SSD1306_ScrollRight(0,7);  // scroll entire screen
-      HAL_Delay(2000);  // 2 sec
-
-      SSD1306_ScrollLeft(0,7);  // scroll entire screen
-      HAL_Delay(2000);  // 2 sec
-
-      SSD1306_Stopscroll();
-      SSD1306_Clear();
-
-      SSD1306_DrawBitmap(0,0,logo, 128, 64, 1);
-      SSD1306_UpdateScreen();
-
-      HAL_Delay(2000);
-
-      SSD1306_ScrollRight(0x00, 0x0f);    // scroll entire screen right
-
-      HAL_Delay (2000);
-
-      SSD1306_ScrollLeft(0x00, 0x0f);  // scroll entire screen left
-
-      HAL_Delay (2000);
-
-      SSD1306_Scrolldiagright(0x00, 0x0f);  // scroll entire screen diagonal right
-
-      HAL_Delay (2000);
-
-      SSD1306_Scrolldiagleft(0x00, 0x0f);  // scroll entire screen diagonal left
-
-      HAL_Delay (2000);
-
-      SSD1306_Stopscroll();   // stop scrolling. If not done, screen will keep on scrolling
-
-
-      SSD1306_InvertDisplay(1);   // invert the display
-
-      HAL_Delay(2000);
-
-      SSD1306_InvertDisplay(0);  // normalize the display
-  //
-
-      HAL_Delay(2000);
+  uint8_t update_screen = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse1,128,64,1);
-	  	  SSD1306_UpdateScreen();
+   // HAL_GPIO_TogglePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin);
+    //HAL_GPIO_TogglePin(LED_BUILD_GPIO_Port, LED_BUILD_Pin);
 
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse2,128,64,1);
-	  	  SSD1306_UpdateScreen();
+    if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)==0){
+    	HAL_GPIO_WritePin(RGB_RED_GPIO_Port, RGB_RED_Pin, 1);
+    	update_screen = 1;
+    }else {
+    	HAL_GPIO_WritePin(RGB_RED_GPIO_Port, RGB_RED_Pin, 0);
+    }
 
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse3,128,64,1);
-	  	  SSD1306_UpdateScreen();
+    if (update_screen){
+  	  SSD1306_Clear(); //display
+    	  SSD1306_GotoXY(20, 18);
+    	  SSD1306_Puts("GAME 1", &Font_7x10, 1);
+    	  SSD1306_GotoXY(20, 28);
+    	  SSD1306_Puts("GAME 2", &Font_7x10, 1);
+    	  SSD1306_GotoXY(20, 38);
+    	  SSD1306_Puts("GAME 3", &Font_7x10, 1);
+    	  SSD1306_GotoXY(20, 48);
+    	  SSD1306_Puts("GAME 4", &Font_7x10, 1);
 
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse4,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse5,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse6,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse7,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse8,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse9,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-
-	  	  SSD1306_Clear();
-	  	  SSD1306_DrawBitmap(0,0,horse10,128,64,1);
-	  	  SSD1306_UpdateScreen();
-
-HAL_GPIO_TogglePin(LED_BUILD_GPIO_Port, LED_BUILD_Pin);
-
+    	  SSD1306_GotoXY(42, 0);
+    	  char* numberstring[(((sizeof children.points)) + 2)/3 + 2];
+    	  sprintf(numberstring, "%d", children.points++);
+    	  SSD1306_Puts(numberstring, &Font_11x18, 1);
+    	  SSD1306_UpdateScreen(); //display
+    	  update_screen = 0;
+    }
 
     /* USER CODE END WHILE */
 
@@ -227,8 +185,7 @@ void SystemClock_Config(void)
   }
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -271,7 +228,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
 }
 
 /**
@@ -285,11 +241,14 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_BUILD_GPIO_Port, LED_BUILD_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, RGB_RED_Pin | RGB_BLUE_Pin | RGB_GREEN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : LED_BUILD_Pin */
   GPIO_InitStruct.Pin = LED_BUILD_Pin;
@@ -298,6 +257,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_BUILD_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : BUTTON_LEFT_Pin BUTTON_RIGHT_Pin */
+  GPIO_InitStruct.Pin = BUTTON_LEFT_Pin | BUTTON_RIGHT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RGB_RED_Pin RGB_BLUE_Pin RGB_GREEN_Pin */
+  GPIO_InitStruct.Pin = RGB_RED_Pin | RGB_BLUE_Pin | RGB_GREEN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
@@ -316,7 +287,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
@@ -325,7 +296,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

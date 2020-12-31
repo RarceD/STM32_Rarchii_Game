@@ -1,6 +1,7 @@
 test.c:13:6:TestLines	40	static
 test.c:103:6:TestRectangles	40	static
-test.c:120:6:TestFilledRectangles	40	static
-test.c:138:6:TestFilledCircles	24	static
-test.c:155:6:TestCircles	24	static
-test.c:174:6:TestTriangles	56	static
+test.c:119:6:character_draw	40	static
+test.c:136:6:TestFilledRectangles	40	static
+test.c:154:6:TestFilledCircles	24	static
+test.c:171:6:TestCircles	24	static
+test.c:190:6:TestTriangles	56	static

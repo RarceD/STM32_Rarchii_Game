@@ -116,6 +116,22 @@ void TestRectangles (uint8_t color)
         HAL_Delay (10);
     }
 }
+void character_draw (uint8_t color)
+{
+    uint8_t n, i, i2;
+
+    SSD1306_Clear ();
+
+    n = min(SSD1306_WIDTH, SSD1306_HEIGHT);
+
+    for (i = 2; i < 30; i += 6)
+    {
+        i2 = i / 2;
+        SSD1306_DrawRectangle((SSD1306_WIDTH/2) - i2, (SSD1306_HEIGHT/2) - i2 + 10, i, i, color);
+        //SSD1306_UpdateScreen();
+        //HAL_Delay (10);
+    }
+}
 
 void TestFilledRectangles (uint8_t color)
 {
