@@ -106,21 +106,17 @@ int main(void) {
 	/* USER CODE BEGIN 2 */
 	SSD1306_Init(); // initialise
 
-	character_draw(1);
+
 	SSD1306_GotoXY(0, 0);
 	SSD1306_Puts("PTS:", &Font_11x18, 1);
 	SSD1306_GotoXY(42, 0);
 	char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
 	sprintf(numberstring, "%d", children.points++);
 	SSD1306_Puts(numberstring, &Font_11x18, 1);
-	SSD1306_UpdateScreen(); //display
 	HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
-
 	uint8_t update_screen = 0;
-
-	  SSD1306_Clear();
-	  SSD1306_DrawBitmap(10,10,triangleBitmaps,78,68,1);
-	  SSD1306_UpdateScreen();
+	SSD1306_DrawBitmap(0, 0, image_data_test_real, 128, 64, 1);
+	SSD1306_UpdateScreen();
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
