@@ -29,6 +29,7 @@
 #include "test.h"
 #include "bitmap.h"
 #include "cartoons.h"
+#include "game_data.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,6 +70,7 @@ typedef struct {
 	int points;
 	uint8_t state_machine;
 	uint8_t scrol_position;
+	uint16_t game1_questions;
 } Player;
 typedef enum {
 	INIT, MENU, GAME_1, GAME_2, GAME_3, GAME_4
@@ -86,6 +88,7 @@ int main(void) {
 	children.points = 33;
 	children.state_machine = INIT;
 	children.scrol_position = 18;
+	children.game1_questions = 0;
 
 	uint16_t timer_val;
 	/* USER CODE END 1 */
@@ -122,7 +125,7 @@ int main(void) {
 	sprintf(numberstring, "%d", children.points++);
 	SSD1306_Puts(numberstring, &Font_11x18, 1);
 	HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 0);
-	uint8_t update_screen = 0;
+
 	SSD1306_DrawBitmap(0, 0, image_data_test_real, 128, 64, 1);
 	SSD1306_UpdateScreen();
 	/* USER CODE END 2 */
@@ -141,13 +144,13 @@ int main(void) {
 				//I update the screen
 				SSD1306_Clear();
 				SSD1306_GotoXY(20, 18);
-				SSD1306_Puts("GAME 1", &Font_7x10, 1);
+				SSD1306_Puts("1:Questions", &Font_7x10, 1);
 				SSD1306_GotoXY(20, 28);
-				SSD1306_Puts("GAME 2", &Font_7x10, 1);
+				SSD1306_Puts("2:Relations", &Font_7x10, 1);
 				SSD1306_GotoXY(20, 38);
-				SSD1306_Puts("GAME 3", &Font_7x10, 1);
+				SSD1306_Puts("3:Maths", &Font_7x10, 1);
 				SSD1306_GotoXY(20, 48);
-				SSD1306_Puts("GAME 4", &Font_7x10, 1);
+				SSD1306_Puts("4:Orthography", &Font_7x10, 1);
 				SSD1306_GotoXY(50, 0);
 				SSD1306_Puts("Select game", &Font_7x10, 1);
 				children.scrol_position = 28;
@@ -188,7 +191,22 @@ int main(void) {
 
 				if (children.scrol_position == 28) {
 					children.state_machine = GAME_1;
-					SSD1306_Puts("GAME 1", &Font_11x18, 1);
+					SSD1306_GotoXY(0, 0);
+					SSD1306_Puts(game1_questions[children.game1_questions++],
+							&Font_7x10, 1);
+					SSD1306_GotoXY(0, 30);
+					SSD1306_Puts(
+							game1_answers_struct[children.game1_questions].yes,
+							&Font_7x10, 1);
+					SSD1306_GotoXY(80, 30);
+					SSD1306_Puts(
+							game1_answers_struct[children.game1_questions].no,
+							&Font_7x10, 1);
+					SSD1306_GotoXY(20, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+					SSD1306_GotoXY(100, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+
 				} else if (children.scrol_position == 38) {
 					SSD1306_Puts("GAME 2", &Font_11x18, 1);
 					children.state_machine = GAME_2;
@@ -200,6 +218,7 @@ int main(void) {
 					children.state_machine = GAME_4;
 				}
 				SSD1306_UpdateScreen();
+				HAL_Delay(60);
 			}
 			break;
 		case (GAME_1):
@@ -217,6 +236,29 @@ int main(void) {
 				HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
 				HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
 			}
+			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
+
+				if (children.game1_questions <= 5) {
+					SSD1306_Clear();
+					SSD1306_GotoXY(0, 0);
+					SSD1306_Puts(game1_questions[children.game1_questions++],
+							&Font_7x10, 1);
+					SSD1306_GotoXY(0, 30);
+					SSD1306_Puts(game1_answers_struct[children.game1_questions].yes,
+							&Font_7x10, 1);
+					SSD1306_GotoXY(80, 30);
+					SSD1306_Puts(game1_answers_struct[children.game1_questions].no,
+							&Font_7x10, 1);
+					SSD1306_GotoXY(20, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+					SSD1306_GotoXY(100, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+					SSD1306_UpdateScreen();
+				}else{
+					children.game1_questions = 0;
+				}
+			}
+
 			break;
 		case (GAME_2):
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
@@ -429,6 +471,7 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+
 	HAL_GPIO_TogglePin(RGB_RED_GPIO_Port, RGB_RED_Pin);
 
 }
