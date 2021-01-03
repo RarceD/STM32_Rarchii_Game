@@ -27,7 +27,6 @@
 #include "ssd1306.h"
 #include "fonts.h"
 #include "test.h"
-#include "bitmap.h"
 #include "cartoons.h"
 #include "game_data.h"
 /* USER CODE END Includes */
@@ -70,7 +69,7 @@ typedef struct {
 	int points;
 	uint8_t state_machine;
 	uint8_t scrol_position;
-	uint16_t game1_questions;
+	uint16_t game_questions;
 	uint8_t selected_game_item;
 } Player;
 typedef enum {
@@ -89,7 +88,7 @@ int main(void) {
 	children.points = 0;
 	children.state_machine = INIT;
 	children.scrol_position = 18;
-	children.game1_questions = 0;
+	children.game_questions = 0;
 	children.selected_game_item = 0;
 
 	uint16_t timer_val;
@@ -193,16 +192,16 @@ int main(void) {
 
 				if (children.scrol_position == 28) {
 					children.state_machine = GAME_1;
-					children.game1_questions = 0;
+					children.game_questions = 0;
 					SSD1306_GotoXY(0, 0);
-					SSD1306_Puts(game1[children.game1_questions].question,
+					SSD1306_Puts(game1[children.game_questions].question,
 							&Font_7x10, 1);
 					SSD1306_GotoXY(0, 30);
-					SSD1306_Puts(game1[children.game1_questions].yes,
-							&Font_7x10, 1);
+					SSD1306_Puts(game1[children.game_questions].yes, &Font_7x10,
+							1);
 					SSD1306_GotoXY(80, 30);
-					SSD1306_Puts(game1[children.game1_questions].no,
-							&Font_7x10, 1);
+					SSD1306_Puts(game1[children.game_questions].no, &Font_7x10,
+							1);
 					SSD1306_GotoXY(20, 50);
 					SSD1306_Puts("<=>", &Font_7x10, 1);
 					//SSD1306_GotoXY(100, 50);
@@ -211,12 +210,25 @@ int main(void) {
 				} else if (children.scrol_position == 38) {
 					SSD1306_Puts("GAME 2", &Font_11x18, 1);
 					children.state_machine = GAME_2;
+
 				} else if (children.scrol_position == 48) {
 					SSD1306_Puts("GAME 3", &Font_11x18, 1);
 					children.state_machine = GAME_3;
 				} else if (children.scrol_position == 18) {
-					SSD1306_Puts("GAME 4", &Font_11x18, 1);
+
+					children.game_questions = 0;
 					children.state_machine = GAME_4;
+					SSD1306_GotoXY(40, 0);
+					SSD1306_Puts(game4[children.game_questions].question,
+							&Font_11x18, 1);
+					SSD1306_GotoXY(20, 30);
+					SSD1306_Puts(game4[children.game_questions].yes, &Font_11x18,
+							1);
+					SSD1306_GotoXY(100, 30);
+					SSD1306_Puts(game4[children.game_questions].no, &Font_11x18,
+							1);
+					SSD1306_GotoXY(20, 52);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
 				}
 				SSD1306_UpdateScreen();
 				HAL_Delay(60);
@@ -227,26 +239,27 @@ int main(void) {
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
 					== 0) {
 				//I check if is the right response:
-				if (game1[children.game1_questions].answare == children.selected_game_item){
+				if (game1[children.game_questions].answare
+						== children.selected_game_item) {
 					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
 					children.points++;
-				}else{
+				} else {
 					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 1);
 				}
 				//Add the points in case of win and then roll over other question:
-				children.game1_questions++;
+				children.game_questions++;
 				children.selected_game_item = 0;
-				if (children.game1_questions <= 5) {
+				if (children.game_questions <= 5) {
 					SSD1306_Clear();
 					SSD1306_GotoXY(0, 0);
-					SSD1306_Puts(game1[children.game1_questions].question,
+					SSD1306_Puts(game1[children.game_questions].question,
 							&Font_7x10, 1);
 					SSD1306_GotoXY(0, 30);
-					SSD1306_Puts(game1[children.game1_questions].yes,
-							&Font_7x10, 1);
+					SSD1306_Puts(game1[children.game_questions].yes, &Font_7x10,
+							1);
 					SSD1306_GotoXY(80, 30);
-					SSD1306_Puts(game1[children.game1_questions].no,
-							&Font_7x10, 1);
+					SSD1306_Puts(game1[children.game_questions].no, &Font_7x10,
+							1);
 					children.selected_game_item = 0;
 					SSD1306_GotoXY(20, 50);
 					SSD1306_Puts("<=>", &Font_7x10, 1);
@@ -325,19 +338,60 @@ int main(void) {
 			}
 			break;
 		case (GAME_4):
+			//Confirm button
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
 					== 0) {
-				children.state_machine = INIT;
-				character_draw(1);
-				SSD1306_GotoXY(0, 0);
-				SSD1306_Puts("PTS:", &Font_11x18, 1);
-				SSD1306_GotoXY(42, 0);
-				char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
-				sprintf(numberstring, "%d", children.points);
-				SSD1306_Puts(numberstring, &Font_11x18, 1);
-				SSD1306_UpdateScreen(); //display
-				HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
-				HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
+				if (children.game_questions < 5) {
+					children.game_questions++;
+					SSD1306_Clear();
+					SSD1306_GotoXY(40, 0);
+					SSD1306_Puts(game4[children.game_questions].question,
+							&Font_11x18, 1);
+					SSD1306_GotoXY(20, 30);
+					SSD1306_Puts(game4[children.game_questions].yes, &Font_11x18,
+							1);
+					SSD1306_GotoXY(100, 30);
+					SSD1306_Puts(game4[children.game_questions].no, &Font_11x18,
+							1);
+					SSD1306_GotoXY(20, 52);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+
+				} else {
+
+					children.state_machine = INIT;
+					children.game_questions=0;
+					//character_draw(1);
+					SSD1306_Clear();
+					SSD1306_GotoXY(0, 0);
+					SSD1306_Puts("PTS:", &Font_11x18, 1);
+					SSD1306_GotoXY(42, 0);
+					char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
+					sprintf(numberstring, "%d", children.points);
+					SSD1306_Puts(numberstring, &Font_11x18, 1);
+					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
+					HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
+				}
+					SSD1306_UpdateScreen(); //display
+			}
+			//If I change the response:
+			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
+				if (children.selected_game_item == 0) {
+					SSD1306_GotoXY(20, 50);
+					SSD1306_Puts("   ", &Font_7x10, 1);
+
+					SSD1306_GotoXY(100, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+					children.selected_game_item++;
+				} else {
+					SSD1306_GotoXY(20, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+
+					SSD1306_GotoXY(100, 50);
+					SSD1306_Puts("   ", &Font_7x10, 1);
+					children.selected_game_item = 0;
+				}
+				SSD1306_UpdateScreen();
+				HAL_Delay(80);
 			}
 			break;
 

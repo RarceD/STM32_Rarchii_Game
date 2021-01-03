@@ -26,8 +26,12 @@ static const Answers game1[] = {
 		{"Capital of France ?","Ecuador",	"Venezuela",0}
 };
 static const Answers game4[] = {
-		{"__ave","LL", "Y", 0},
-		{"__ueso","Q", "K", 0},
+		{"_ave","LL", "Y", 0},
+		{"hue_o","V", "B", 0},
+		{"_ueso","Q", "K", 0},
+		{"fran_a","G", "J", 1},
+		{"ele_ante","F", "G", 1},
+		{"_ueso","Q", "K", 0}
 };
 
 

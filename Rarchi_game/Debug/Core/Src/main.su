@@ -1,7 +1,7 @@
-main.c:86:5:main	112	static
-main.c:357:6:SystemClock_Config	72	static
-main.c:392:13:MX_I2C1_Init	8	static
-main.c:424:13:MX_TIM2_Init	32	static
-main.c:466:13:MX_GPIO_Init	40	static
-main.c:505:6:HAL_TIM_PeriodElapsedCallback	16	static
-main.c:516:6:Error_Handler	4	static
+main.c:85:5:main	112	static
+main.c:411:6:SystemClock_Config	72	static
+main.c:446:13:MX_I2C1_Init	8	static
+main.c:478:13:MX_TIM2_Init	32	static
+main.c:520:13:MX_GPIO_Init	40	static
+main.c:559:6:HAL_TIM_PeriodElapsedCallback	16	static
+main.c:570:6:Error_Handler	4	static
