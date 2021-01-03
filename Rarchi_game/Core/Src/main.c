@@ -29,6 +29,7 @@
 #include "test.h"
 #include "cartoons.h"
 #include "game_data.h"
+#include "gameplay_logic.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,16 +66,8 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-typedef struct {
-	int points;
-	uint8_t state_machine;
-	uint8_t scrol_position;
-	uint16_t game_questions;
-	uint8_t selected_game_item;
-} Player;
-typedef enum {
-	INIT, MENU, GAME_1, GAME_2, GAME_3, GAME_4
-} State_machine;
+
+
 
 /* USER CODE END 0 */
 
@@ -222,8 +215,8 @@ int main(void) {
 					SSD1306_Puts(game4[children.game_questions].question,
 							&Font_11x18, 1);
 					SSD1306_GotoXY(20, 30);
-					SSD1306_Puts(game4[children.game_questions].yes, &Font_11x18,
-							1);
+					SSD1306_Puts(game4[children.game_questions].yes,
+							&Font_11x18, 1);
 					SSD1306_GotoXY(100, 30);
 					SSD1306_Puts(game4[children.game_questions].no, &Font_11x18,
 							1);
@@ -238,50 +231,9 @@ int main(void) {
 			//If I confirm the answer:
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
 					== 0) {
-				//I check if is the right response:
-				if (game1[children.game_questions].answare
-						== children.selected_game_item) {
-					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
-					children.points++;
-				} else {
-					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 1);
-				}
-				//Add the points in case of win and then roll over other question:
-				children.game_questions++;
-				children.selected_game_item = 0;
-				if (children.game_questions <= 5) {
-					SSD1306_Clear();
-					SSD1306_GotoXY(0, 0);
-					SSD1306_Puts(game1[children.game_questions].question,
-							&Font_7x10, 1);
-					SSD1306_GotoXY(0, 30);
-					SSD1306_Puts(game1[children.game_questions].yes, &Font_7x10,
-							1);
-					SSD1306_GotoXY(80, 30);
-					SSD1306_Puts(game1[children.game_questions].no, &Font_7x10,
-							1);
-					children.selected_game_item = 0;
-					SSD1306_GotoXY(20, 50);
-					SSD1306_Puts("<=>", &Font_7x10, 1);
-					//SSD1306_GotoXY(100, 50);
-					//SSD1306_Puts("<=>", &Font_7x10, 1);
-					SSD1306_UpdateScreen();
-				} else {
-					SSD1306_Clear();
-					children.state_machine = INIT;
-					SSD1306_DrawBitmap(0, 0, image_data_test_real, 128, 64, 1);
-					SSD1306_GotoXY(0, 0);
-					SSD1306_Puts("PTS:", &Font_11x18, 1);
-					SSD1306_GotoXY(42, 0);
-					char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
-					sprintf(numberstring, "%d", children.points);
-					SSD1306_Puts(numberstring, &Font_11x18, 1);
-					SSD1306_UpdateScreen(); //display
-					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
-					HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
 
-				}
-				HAL_Delay(100);
+				gameplay_1_confirm(&children);
+
 			}
 			//If I change the response:
 			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
@@ -348,8 +300,8 @@ int main(void) {
 					SSD1306_Puts(game4[children.game_questions].question,
 							&Font_11x18, 1);
 					SSD1306_GotoXY(20, 30);
-					SSD1306_Puts(game4[children.game_questions].yes, &Font_11x18,
-							1);
+					SSD1306_Puts(game4[children.game_questions].yes,
+							&Font_11x18, 1);
 					SSD1306_GotoXY(100, 30);
 					SSD1306_Puts(game4[children.game_questions].no, &Font_11x18,
 							1);
@@ -359,7 +311,7 @@ int main(void) {
 				} else {
 
 					children.state_machine = INIT;
-					children.game_questions=0;
+					children.game_questions = 0;
 					//character_draw(1);
 					SSD1306_Clear();
 					SSD1306_GotoXY(0, 0);
@@ -371,7 +323,7 @@ int main(void) {
 					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
 					HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
 				}
-					SSD1306_UpdateScreen(); //display
+				SSD1306_UpdateScreen(); //display
 			}
 			//If I change the response:
 			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
