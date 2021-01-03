@@ -10,27 +10,24 @@
 #ifndef INC_GAME_DATA_H_
 #define INC_GAME_DATA_H_
 typedef struct{
-	const char* yes;
-	const char* no;
+	const char* question;
+	const char* yes; //0
+	const char* no; //1
+	uint8_t answare;
 }Answers;
-static const char* const game1_questions[] = {
-		"Capital of Spain ?",
-		"Capital of Italy ?",
-		"Capital of Germany ?",
-		"Capital of Russia ?",
-		"Capital of Germany ?",
-		"Capital of France ?"
+
+static const Answers game1[] = {
+		{"Capital of Spain ?","Andorra", "Madrid",1},
+		{"Capital of Italy ?","aasdf", "ggggg",0},
+		{"Capital of Germany ?","3244as", "asdf234",1},
+		{"Capital of Russia ?","Madrid","Berlin",1},
+		{"Capital of Spain ?","Ecuador","Venezuela",1},
+		{"Capital of Germany ?","Suiza","Berlin",0},
+		{"Capital of France ?","Ecuador",	"Venezuela",0}
 };
-
-static const Answers game1_answers_struct[] = {
-		{"Andorra", "Madrid"},
-		{"aasdf", "ggggg"},
-		{"3244as", "asdf234"},
-		{"Madrid","Berlin"},
-		{"Ecuador","Venezuela"},
-		{"Suiza","Berlin"},
-		{"Ecuador",	"Venezuela"}
-
+static const Answers game4[] = {
+		{"__ave","LL", "Y", 0},
+		{"__ueso","Q", "K", 0},
 };
 
 
