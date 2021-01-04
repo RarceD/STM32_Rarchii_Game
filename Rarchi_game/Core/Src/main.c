@@ -120,7 +120,11 @@ int main(void) {
 	SSD1306_Puts(numberstring, &Font_11x18, 1);
 	HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 0);
 
-	SSD1306_DrawBitmap(0, 0, image_data_test_real, 128, 64, 1);
+	SSD1306_DrawBitmap(30, 0, image_data_test_real, 128, 64, 1);
+	int position_icon = 0;
+	SSD1306_DrawBitmap(position_icon, 20, icon_house, 25, 25, 1);
+	SSD1306_DrawBitmap(position_icon+=25, 20, icon_cross, 25, 25, 1);
+	SSD1306_DrawBitmap(position_icon+=25, 20, icon_circle, 25, 25, 1);
 	SSD1306_UpdateScreen();
 	/* USER CODE END 2 */
 
@@ -231,9 +235,7 @@ int main(void) {
 			//If I confirm the answer:
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
 					== 0) {
-
 				gameplay_1_confirm(&children);
-
 			}
 			//If I change the response:
 			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
