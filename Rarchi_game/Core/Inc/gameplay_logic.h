@@ -28,5 +28,6 @@ typedef enum {
 
 
 void gameplay_1_confirm(Player *child);
+void gameplay_2_confirm(Player *child);
 
 #endif /* INC_GAMEPLAY_LOGIC_H_ */

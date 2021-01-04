@@ -9,12 +9,21 @@
 
 #ifndef INC_GAME_DATA_H_
 #define INC_GAME_DATA_H_
+#include "cartoons.h"
+
 typedef struct{
 	const char* question;
 	const char* yes; //0
 	const char* no; //1
 	uint8_t answare;
 }Answers;
+
+typedef struct{
+	uint8_t* icon_1;
+	uint8_t* icon_2;
+	uint8_t answare;
+	const char* question;
+}Icon_answers;
 
 static const Answers game1[] = {
 		{"Capital of Spain ?","Andorra", "Madrid",1},
@@ -24,6 +33,14 @@ static const Answers game1[] = {
 		{"Capital of Spain ?","Ecuador","Venezuela",1},
 		{"Capital of Germany ?","Suiza","Berlin",0},
 		{"Capital of France ?","Ecuador",	"Venezuela",0}
+};
+static const Icon_answers game2[] = {
+		{icon_house,icon_circle, 0, "Casa"},
+		{icon_circle,icon_house, 0, "Circulo"},
+		{icon_house,icon_circle, 0, "Otro"},
+		{icon_circle,icon_house, 0, "Imaginacion"},
+		{icon_house,icon_circle, 0, "Casa"},
+		{icon_circle,icon_house, 0, "Queso"}
 };
 static const Answers game4[] = {
 		{"_ave","LL", "Y", 0},

@@ -67,8 +67,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-
-
 /* USER CODE END 0 */
 
 /**
@@ -123,8 +121,8 @@ int main(void) {
 	SSD1306_DrawBitmap(30, 0, image_data_test_real, 128, 64, 1);
 	int position_icon = 0;
 	SSD1306_DrawBitmap(position_icon, 20, icon_house, 25, 25, 1);
-	SSD1306_DrawBitmap(position_icon+=25, 20, icon_cross, 25, 25, 1);
-	SSD1306_DrawBitmap(position_icon+=25, 20, icon_circle, 25, 25, 1);
+	SSD1306_DrawBitmap(position_icon += 25, 20, icon_cross, 25, 25, 1);
+	SSD1306_DrawBitmap(position_icon += 25, 20, icon_circle, 25, 25, 1);
 	SSD1306_UpdateScreen();
 	/* USER CODE END 2 */
 
@@ -205,12 +203,23 @@ int main(void) {
 					//SSD1306_Puts("<=>", &Font_7x10, 1);
 
 				} else if (children.scrol_position == 38) {
-					SSD1306_Puts("GAME 2", &Font_11x18, 1);
+
 					children.state_machine = GAME_2;
+					children.game_questions = 0;
+					SSD1306_Clear();
+					SSD1306_GotoXY(0, 0);
+					SSD1306_Puts(game2[children.game_questions].question, &Font_11x18, 1);
+					int position_icon = 20;
+					SSD1306_DrawBitmap(position_icon, 20, game2[children.game_questions].icon_1, 25, 25, 1);
+					position_icon+=60;
+					SSD1306_DrawBitmap(position_icon, 20,  game2[children.game_questions].icon_2, 25, 25, 1);
+					SSD1306_GotoXY(22, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
 
 				} else if (children.scrol_position == 48) {
 					SSD1306_Puts("GAME 3", &Font_11x18, 1);
 					children.state_machine = GAME_3;
+					children.game_questions = 0;
 				} else if (children.scrol_position == 18) {
 
 					children.game_questions = 0;
@@ -260,19 +269,30 @@ int main(void) {
 
 			break;
 		case (GAME_2):
+			//If I confirm the answer:
 			if (HAL_GPIO_ReadPin(BUTTON_RIGHT_GPIO_Port, BUTTON_RIGHT_Pin)
 					== 0) {
-				children.state_machine = INIT;
-				character_draw(1);
-				SSD1306_GotoXY(0, 0);
-				SSD1306_Puts("PTS:", &Font_11x18, 1);
-				SSD1306_GotoXY(42, 0);
-				char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
-				sprintf(numberstring, "%d", children.points);
-				SSD1306_Puts(numberstring, &Font_11x18, 1);
-				SSD1306_UpdateScreen(); //display
-				HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
-				HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
+				gameplay_2_confirm(&children);
+			}
+			//If I change the response:
+			if (HAL_GPIO_ReadPin(BUTTON_LEFT_GPIO_Port, BUTTON_LEFT_Pin) == 0) {
+				if (children.selected_game_item == 0) {
+					SSD1306_GotoXY(22, 50);
+					SSD1306_Puts("   ", &Font_7x10, 1);
+
+					SSD1306_GotoXY(80, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+					children.selected_game_item++;
+				} else {
+					SSD1306_GotoXY(22, 50);
+					SSD1306_Puts("<=>", &Font_7x10, 1);
+
+					SSD1306_GotoXY(80, 50);
+					SSD1306_Puts("   ", &Font_7x10, 1);
+					children.selected_game_item = 0;
+				}
+				SSD1306_UpdateScreen();
+				HAL_Delay(80);
 			}
 			break;
 		case (GAME_3):
