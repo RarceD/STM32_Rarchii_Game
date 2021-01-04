@@ -42,6 +42,16 @@ static const Icon_answers game2[] = {
 		{icon_house,icon_circle, 0, "Casa"},
 		{icon_circle,icon_house, 0, "Queso"}
 };
+static const Answers game3[] = {
+		{"4 + _ = 7","3", "2", 0},
+		{"5 - _ = -1","3", "6", 1},
+		{"12 + _ = 10","-2", "4", 0},
+		{"5 + _ = 7","3", "2", 1},
+		{"5 - _ = -1","3", "6", 1},
+		{"12 + _ = 10","-2", "4", 0},
+		{"5 + _ = 7","3", "2", 1}
+
+};
 static const Answers game4[] = {
 		{"_ave","LL", "Y", 0},
 		{"hue_o","V", "B", 0},

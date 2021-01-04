@@ -1,2 +1,3 @@
 gameplay_logic.c:10:6:gameplay_1_confirm	40	static
 gameplay_logic.c:54:6:gameplay_2_confirm	48	static
+gameplay_logic.c:100:6:gameplay_3_confirm	40	static
