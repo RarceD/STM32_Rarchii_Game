@@ -41,7 +41,7 @@ void gameplay_1_confirm(Player *child) {
 		SSD1306_Puts("PTS:", &Font_11x18, 1);
 		SSD1306_GotoXY(42, 0);
 		char *numberstring[(((sizeof child->points)) + 2) / 3 + 2];
-		sprintf(numberstring, "%d", child->points);
+		sprintf((char *)numberstring, "%d", child->points);
 		SSD1306_Puts(numberstring, &Font_11x18, 1);
 		SSD1306_UpdateScreen(); //display
 		HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
@@ -86,7 +86,7 @@ void gameplay_2_confirm(Player *child) {
 		SSD1306_Puts("PTS:", &Font_11x18, 1);
 		SSD1306_GotoXY(42, 0);
 		char *numberstring[(((sizeof child->points)) + 2) / 3 + 2];
-		sprintf(numberstring, "%d", child->points);
+		sprintf((char *)numberstring, "%d", child->points);
 		SSD1306_Puts(numberstring, &Font_11x18, 1);
 		SSD1306_UpdateScreen(); //display
 		HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
@@ -129,7 +129,7 @@ void gameplay_3_confirm(Player *child) {
 		SSD1306_Puts("PTS:", &Font_11x18, 1);
 		SSD1306_GotoXY(42, 0);
 		char *numberstring[(((sizeof child->points)) + 2) / 3 + 2];
-		sprintf(numberstring, "%d", child->points);
+		sprintf((char *)numberstring, "%d", child->points);
 		SSD1306_Puts(numberstring, &Font_11x18, 1);
 		HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
 		HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);

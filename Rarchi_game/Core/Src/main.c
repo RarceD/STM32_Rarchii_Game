@@ -30,6 +30,7 @@
 #include "cartoons.h"
 #include "game_data.h"
 #include "gameplay_logic.h"
+#include "internal_flash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,6 +40,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -82,7 +84,6 @@ int main(void) {
 	children.game_questions = 0;
 	children.selected_game_item = 0;
 
-	uint16_t timer_val;
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
@@ -106,28 +107,51 @@ int main(void) {
 	MX_I2C1_Init();
 	MX_TIM2_Init();
 	/* USER CODE BEGIN 2 */
+
+	//I get the children points and save them on children struct:
+	//uint16_t write_pts = 12;
+	//uint16_t *pointer_pts_write = &write_pts;
+	//save_to_flash((uint8_t*)pointer_pts_write);
+	uint16_t read_pts = 0;
+	uint16_t *pointer_pts_read = &read_pts;
+	read_flash((uint8_t*) pointer_pts_read);
+	children.points = read_pts;
+
 	SSD1306_Init(); // initialise
 	HAL_TIM_Base_Init(&htim2);
 	HAL_TIM_Base_Start_IT(&htim2);
-	timer_val = __HAL_TIM_GET_COUNTER(&htim2);
+
 	SSD1306_GotoXY(0, 0);
 	SSD1306_Puts("PTS:", &Font_11x18, 1);
 	SSD1306_GotoXY(42, 0);
 	char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
-	sprintf(numberstring, "%d", children.points);
-	SSD1306_Puts(numberstring, &Font_11x18, 1);
+	sprintf((char*) numberstring, "%d", children.points);
+	SSD1306_Puts((char*) numberstring, &Font_11x18, 1);
 	HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 0);
 
-	SSD1306_DrawBitmap(30, 0, image_data_test_real, 128, 64, 1);
-	int position_icon = 0;
-	SSD1306_DrawBitmap(position_icon, 20, icon_house, 25, 25, 1);
-	SSD1306_DrawBitmap(position_icon += 25, 20, icon_cross, 25, 25, 1);
-	SSD1306_DrawBitmap(position_icon += 25, 20, icon_circle, 25, 25, 1);
+	//SSD1306_DrawBitmap(30, 0, image_data_test_real, 128, 64, 1);
+	//int position_icon = 0;
+	//SSD1306_DrawBitmap(position_icon, 20, icon_house, 25, 25, 1);
+	//SSD1306_DrawBitmap(position_icon += 25, 20, icon_cross, 25, 25, 1);
+
+	SSD1306_DrawBitmap(0, 11, duck_1, 128, 54, 1);
 	SSD1306_UpdateScreen();
+	/*
+	 HAL_Delay(300);
+	 SSD1306_Clear();
+	 SSD1306_DrawBitmap(0, 11, duck_2, 128, 54, 1);
+	 SSD1306_UpdateScreen();
+	 HAL_Delay(300);
+	 SSD1306_Clear();
+	 SSD1306_DrawBitmap(0, 11, duck_3, 128, 54, 1);
+	 SSD1306_UpdateScreen();
+	 HAL_Delay(300);
+	 */
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
+
 	while (1) {
 
 		switch (children.state_machine) {
@@ -224,11 +248,14 @@ int main(void) {
 					children.state_machine = GAME_3;
 					children.game_questions = 0;
 					SSD1306_GotoXY(0, 0);
-					SSD1306_Puts(game3[children.game_questions].question, &Font_11x18, 1);
-					SSD1306_GotoXY(20-5, 30);
-					SSD1306_Puts(game3[children.game_questions].yes, &Font_11x18, 1);
-					SSD1306_GotoXY(100-5, 30);
-					SSD1306_Puts(game3[children.game_questions].no, &Font_11x18, 1);
+					SSD1306_Puts(game3[children.game_questions].question,
+							&Font_11x18, 1);
+					SSD1306_GotoXY(20 - 5, 30);
+					SSD1306_Puts(game3[children.game_questions].yes,
+							&Font_11x18, 1);
+					SSD1306_GotoXY(100 - 5, 30);
+					SSD1306_Puts(game3[children.game_questions].no, &Font_11x18,
+							1);
 					children.selected_game_item = 0;
 					SSD1306_GotoXY(20, 50);
 					SSD1306_Puts("<=>", &Font_7x10, 1);
@@ -362,8 +389,8 @@ int main(void) {
 					SSD1306_Puts("PTS:", &Font_11x18, 1);
 					SSD1306_GotoXY(42, 0);
 					char *numberstring[(((sizeof children.points)) + 2) / 3 + 2];
-					sprintf(numberstring, "%d", children.points);
-					SSD1306_Puts(numberstring, &Font_11x18, 1);
+					sprintf((char*) numberstring, "%d", children.points);
+					SSD1306_Puts(&numberstring, &Font_11x18, 1);
 					HAL_GPIO_WritePin(RGB_BLUE_GPIO_Port, RGB_BLUE_Pin, 0);
 					HAL_GPIO_WritePin(RGB_GREEN_GPIO_Port, RGB_GREEN_Pin, 1);
 				}
@@ -412,11 +439,11 @@ void SystemClock_Config(void) {
 	 */
 	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
 	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-	RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV2;
+	RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
 	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
 	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
 	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-	RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL15;
+	RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
 		Error_Handler();
 	}

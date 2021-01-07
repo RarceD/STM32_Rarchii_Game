@@ -1,0 +1,2 @@
+internal_flash.c:9:6:save_to_flash	80	dynamic
+internal_flash.c:51:6:read_flash	24	static

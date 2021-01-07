@@ -12,17 +12,17 @@
 #include "cartoons.h"
 
 typedef struct{
-	const char* question;
-	const char* yes; //0
-	const char* no; //1
+	 char* question;
+	 char* yes; //0
+	 char* no; //1
 	uint8_t answare;
 }Answers;
 
 typedef struct{
-	uint8_t* icon_1;
-	uint8_t* icon_2;
-	uint8_t answare;
-	const char* question;
+	const uint8_t* icon_1;
+	const uint8_t* icon_2;
+	const uint8_t answare;
+	 char* question;
 }Icon_answers;
 
 static const Answers game1[] = {
