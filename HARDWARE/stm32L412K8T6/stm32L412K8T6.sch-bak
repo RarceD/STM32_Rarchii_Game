@@ -757,4 +757,97 @@ F 3 "" H 7150 1400 50  0001 C CNN
 	1    7150 1400
 	1    0    0    -1  
 $EndComp
+$Comp
+L Connector:Conn_01x03_Male J?
+U 1 1 5FFB38F8
+P 9500 2500
+F 0 "J?" H 9608 2689 50  0000 C CNN
+F 1 "Conn_01x03_Male" H 9608 2690 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Right" H 9500 2500 50  0001 C CNN
+F 3 "~" H 9500 2500 50  0001 C CNN
+	1    9500 2500
+	1    0    0    -1  
+$EndComp
+Text GLabel 4150 2600 2    50   Input ~ 0
+PA2
+Text GLabel 4150 2700 2    50   Input ~ 0
+PA3
+Text GLabel 4150 2800 2    50   Input ~ 0
+PA4
+Text GLabel 4150 2900 2    50   Input ~ 0
+PA5
+Text GLabel 4150 2400 2    50   Input ~ 0
+PA0
+Text GLabel 4150 3200 2    50   Input ~ 0
+PA8
+Text GLabel 4150 3500 2    50   Input ~ 0
+PA11
+Text GLabel 9800 2500 2    50   Input ~ 0
+PA2
+Text GLabel 9800 2600 2    50   Input ~ 0
+PA3
+Text GLabel 9800 2700 2    50   Input ~ 0
+PA4
+Text GLabel 9800 2800 2    50   Input ~ 0
+PA5
+Text GLabel 9800 2400 2    50   Input ~ 0
+PA0
+Text GLabel 9800 2900 2    50   Input ~ 0
+PA8
+Text GLabel 9800 3050 2    50   Input ~ 0
+PA11
+$Comp
+L Connector:Conn_01x03_Male J?
+U 1 1 5FFBA7BE
+P 9500 2800
+F 0 "J?" H 9608 2989 50  0000 C CNN
+F 1 "Conn_01x03_Male" H 9608 2990 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Right" H 9500 2800 50  0001 C CNN
+F 3 "~" H 9500 2800 50  0001 C CNN
+	1    9500 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9700 2400 9800 2400
+Wire Wire Line
+	9800 2500 9700 2500
+Wire Wire Line
+	9700 2600 9800 2600
+Wire Wire Line
+	9800 2700 9700 2700
+Wire Wire Line
+	9700 2800 9800 2800
+Wire Wire Line
+	9700 2900 9800 2900
+Text GLabel 4150 3900 2    50   Input ~ 0
+PA15
+Text GLabel 9800 3150 2    50   Input ~ 0
+PA15
+Text GLabel 3100 3900 0    50   Input ~ 0
+PB9
+Wire Wire Line
+	3150 3900 3100 3900
+Text GLabel 3100 3300 0    50   Input ~ 0
+PB1
+Wire Wire Line
+	3100 3300 3150 3300
+Text GLabel 9800 3250 2    50   Input ~ 0
+PB1
+$Comp
+L Connector:Conn_01x03_Male J?
+U 1 1 5FFD3D3C
+P 9500 3150
+F 0 "J?" H 9608 3339 50  0000 C CNN
+F 1 "Conn_01x03_Male" H 9608 3340 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Right" H 9500 3150 50  0001 C CNN
+F 3 "~" H 9500 3150 50  0001 C CNN
+	1    9500 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9800 3050 9700 3050
+Wire Wire Line
+	9700 3150 9800 3150
+Wire Wire Line
+	9700 3250 9800 3250
 $EndSCHEMATC
